@@ -1,24 +1,23 @@
 (function() {
-  // 1. Force Page Container Width to 1280px (Isse layout pichkega nahi)
-  var style = document.createElement('style');
-  style.innerHTML = 'html, body, #root { width: 1280px !important; min-width: 1280px !important; overflow-x: hidden !important; margin: 0 auto !important; }';
-  document.head.appendChild(style);
-
-  // 2. Viewport Auto-Scaling Logic
-  function applyScale() {
+  function fixViewport() {
     var desktopWidth = 1280;
-    var screenWidth = window.innerWidth;
-    var scale = screenWidth < desktopWidth ? screenWidth / desktopWidth : 1;
-    
+    var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+    var scale = screenWidth / desktopWidth;
+
     var meta = document.querySelector('meta[name="viewport"]');
     if (!meta) {
       meta = document.createElement('meta');
       meta.name = 'viewport';
       document.head.appendChild(meta);
     }
-    meta.content = 'width=' + desktopWidth + ', initial-scale=' + scale + ', maximum-scale=1.0, user-scalable=no';
+
+    if (screenWidth < desktopWidth) {
+      meta.setAttribute('content', 'width=' + desktopWidth + ', initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', user-scalable=no');
+    } else {
+      meta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    }
   }
 
-  applyScale();
-  window.addEventListener('resize', applyScale);
+  fixViewport();
+  window.addEventListener('resize', fixViewport);
 })();
