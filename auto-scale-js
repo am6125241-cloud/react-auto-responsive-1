@@ -1,0 +1,18 @@
+(function() {
+  function applyScale() {
+    var desktopWidth = 1280; // Target Laptop Width
+    var screenWidth = window.innerWidth;
+    var scale = screenWidth < desktopWidth ? screenWidth / desktopWidth : 1;
+    
+    var meta = document.querySelector('meta[name="viewport"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.name = 'viewport';
+      document.head.appendChild(meta);
+    }
+    meta.content = 'width=' + desktopWidth + ', initial-scale=' + scale + ', maximum-scale=1.0, user-scalable=no';
+  }
+
+  applyScale();
+  window.addEventListener('resize', applyScale);
+})();
